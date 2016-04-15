@@ -34,7 +34,7 @@
       $('.comment-thread-expand', $comments).click(function(){
         var $this = $(this);
         var $parent = $this.parent();
-        var $toToggle = $parent.next('.indented');
+        var $toToggle = $parent.nextUntil('.indented').next();
         var text = ($this.text() == Drupal.t('Hide responses')) ? Drupal.t('Show responses') : Drupal.t('Hide responses');
         $this.text(text);
 
@@ -56,7 +56,7 @@
        */
       function collapsibleCommentsEnable(element, button, mode, level) {
         element.hide();
-        element.prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
+        element.prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
         if (mode == 0) return;
 
         if (mode == 1 && level > 0) {
@@ -68,7 +68,7 @@
           $subIndent.each(function(){
             var $this = $(this);
             $this.hide();
-            $this.prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
+            $this.prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
           });
         } // End mode 1
       }
