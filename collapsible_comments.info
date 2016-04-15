@@ -3,5 +3,6 @@ description = Allows for collapsing/expanding comment threads through use of jQu
 dependencies[] = comment
 core = 7.x
 files[] = collapsible_comments.module
+stylesheets[all][] = collapsible_comments.css
 scripts[] = collapsible_comments.js
 configure = admin/config/content/collapsible_comments

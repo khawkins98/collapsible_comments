@@ -2,7 +2,7 @@
   // Theme function for the show/hide links
   // Make sure to keep a.comment-thread-expand if you override this theme function
   Drupal.theme.prototype.commentCollapseLink = function(text,count) {
-    return '<a href="#" class="comment-thread-expand"><span class="prefix">'+ Drupal.t(text) + '</span> ' + count + ' ' + Drupal.t("responses") +'</a>';
+    return '<a href="#" class="comment-thread-expand"><span class="prefix">'+ Drupal.t(text) + '</span> ' + count + ' ' + Drupal.t("responses to this comment") +'</a>';
   }
 
   // Drupal behaviour for collapsing indented comments.

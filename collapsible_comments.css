@@ -1,0 +1,3 @@
+a.comment-thread-expand { color:#666; margin-left: 1rem; font-size: .8rem; }
+a.comment-thread-expand:before { content: "( "; }
+a.comment-thread-expand:after { content: " )"; }
