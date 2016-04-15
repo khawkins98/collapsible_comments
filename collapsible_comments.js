@@ -10,6 +10,10 @@
     attach: function (context, settings) {
       // Cache selections and return early if appropiate.
       var $comments = $('#comments:not(.collapsible-comments-processed)').addClass('collapsible-comments-processed');
+      // If we didn't find #comments, this might be a panel view.
+      if ($comments.size() < 1) { 
+        $comments = $('.pane-node-comments:not(.collapsible-comments-processed) .pane-content').addClass('collapsible-comments-processed');
+      }
       if ($comments.size() < 1) return;
       var $indented = $comments.find('> .indented');
       if ($indented.size() < 1) return;
