@@ -1,8 +1,8 @@
 (function ($) {
   // Theme function for the show/hide links
   // Make sure to keep a.comment-thread-expand if you override this theme function
-  Drupal.theme.prototype.commentCollapseLink = function(text) {
-    return '<a href="#" class="comment-thread-expand">'+ Drupal.t(text) +'</a>';
+  Drupal.theme.prototype.commentCollapseLink = function(text,count) {
+    return '<a href="#" class="comment-thread-expand"><span class="prefix">'+ Drupal.t(text) + '</span> ' + count + ' ' + Drupal.t("responses") +'</a>';
   }
 
   // Drupal behaviour for collapsing indented comments.
@@ -23,20 +23,18 @@
       var mode = settings.collapsible_comments.mode;
       var effect = settings.collapsible_comments.effect;
 
-      var button = Drupal.theme('commentCollapseLink', 'Show responses');
-
       // 1. Find the appropiate indentation level
       $toProcess = collapsibleCommentsGetLevel(level, $comments, mode);
       // 2. Execute the proper setup depending on mode
-      collapsibleCommentsEnable($toProcess, button, mode, level)
+      collapsibleCommentsEnable($toProcess, mode, level)
 
       // 3. Bind our behaviour to the click event
       $('.comment-thread-expand', $comments).click(function(){
         var $this = $(this);
         var $parent = $this.parent();
         var $toToggle = $parent.nextUntil('.indented').next();
-        var text = ($this.text() == Drupal.t('Hide responses')) ? Drupal.t('Show responses') : Drupal.t('Hide responses');
-        $this.text(text);
+        var text = ($this.find('.prefix').text() == Drupal.t('Hide')) ? Drupal.t('Show') : Drupal.t('Hide');
+        $this.find('.prefix').text(text);
 
         if (effect == 'slide') {
           $toToggle.slideToggle();
@@ -54,23 +52,27 @@
       /**
        * Helper function to enable a collasible comment thread.
        */
-      function collapsibleCommentsEnable(element, button, mode, level) {
+      function collapsibleCommentsEnable(element, mode, level) {
         element.hide();
-        element.prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
-        if (mode == 0) return;
+        $(element).each( function() { 
+          var howManyNestedComments = $(this).find('.comment').size();
+          var button = Drupal.theme('commentCollapseLink', 'Show', howManyNestedComments);
+          $(this).prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
+          if (mode == 0) return;
 
-        if (mode == 1 && level > 0) {
-          // handle all children indented independently
-          var $subIndent =  $('.indented', element);
-          var num = $subIndent.size();
-          if (num < 1) return;
+          if (mode == 1 && level > 0) {
+            // handle all children indented independently
+            var $subIndent =  $('.indented', $(this));
+            var num = $subIndent.size();
+            if (num < 1) return;
 
-          $subIndent.each(function(){
-            var $this = $(this);
-            $this.hide();
-            $this.prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
-          });
-        } // End mode 1
+            $subIndent.each(function(){
+              var $this = $(this);
+              $this.hide();
+              $this.prevUntil('.comment').prev().append(button).addClass('indented-hidden collaspsible-comments-enabled');
+            });
+          } // End mode 1
+        });
       }
 
       /**
