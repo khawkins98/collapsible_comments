@@ -105,7 +105,7 @@
         }
 
         // This handles the rest of Comment indentation levels displayed options
-        $selection = $('> .indented', comments);
+        var $selection = $('> .indented', comments);
         while (currentLevel < level) {
           $selection = $('> .indented', $selection);
           currentLevel++;
